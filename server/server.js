@@ -1,8 +1,8 @@
 const express = require("express");
-const MongoClient = require("mongodb").MongoClient;
 const ObjectId = require("mongodb").ObjectID;
-
-import DBService from ( './services/DB/DB.js');
+const createCity = require("./models/City/cityCreator");
+const cityGetAll = require("./models/City/cityGetAll");
+const DBService = require( './services/DB/DB');
 
 const dbService = new DBService({
   dbUrl: "mongodb+srv://vitalii:bhbyf12123434A@cluster0-jd0za.mongodb.net/test?retryWrites=true&w=majority",
@@ -12,21 +12,14 @@ const dbService = new DBService({
   }
 });
 
-const createCity = require("./models/City/cityCreator");
-const cityGetAll = require("./models/City/cityGetAll");
-console.log(createCity)
+dbService.createMongoClient();
+
 const app = express();
 const jsonParser = express.json();
 app.use(jsonParser);
 const PORT = process.env.PORT || 8080;
 
-const mongoClient = new MongoClient("mongodb+srv://vitalii:bhbyf12123434A@cluster0-jd0za.mongodb.net/test?retryWrites=true&w=majority", {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-});
-
-mongoClient.connect(function(err, client) {
-  if (err) return console.log(err);
+dbService.getMongoClient().connect(function(err, client) {
   dbClient = client;
 
   const dataBase = client.db("cities");
