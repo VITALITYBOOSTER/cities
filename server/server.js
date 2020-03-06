@@ -1,6 +1,8 @@
 const express = require("express");
 const MongoClient = require("mongodb").MongoClient;
 const ObjectId = require("mongodb").ObjectID;
+const createCity = require("./models/City/cityCreator");
+const cityGetAll = require("./models/City/cityGetAll");
 
 const app = express();
 const jsonParser = express.json();
@@ -36,25 +38,22 @@ app.use(function(req, res, next) {
 });
 
 app.get("/", (req, res) => {
-  app.locals.cities.find({}).toArray((err, result) => {
-    res.send(result);
-  });
+
+  const cities = app.locals.cities;
+
+  cities.find({}).toArray(cityGetAll(req, res));
+
 });
 
 app.post("/cities", (req, res) => {
-  const cities = app.locals.cities;
-  const city = {
-    cityName: req.body.cityName,
-    originalCityName: req.body.originalCityName,
-    status: req.body.status,
-    population: +req.body.population
-  };
 
-  cities.insertOne(city, (err, result) => {
-    console.log(err);
-    res.send(result);
-  });
-});
+  const cities = app.locals.cities;
+
+  const cityCreatorhandler = createCity(req, res);
+
+  cities.insertOne(cityCreatorhandler);
+  
+})
 
 app.delete("/cities", (req, res) => {
   const cities = app.locals.cities;
