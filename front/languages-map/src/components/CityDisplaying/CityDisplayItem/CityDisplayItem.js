@@ -2,7 +2,7 @@ import React from "react";
 
 const CityDisplayItem = props => {
   const deleteCity = () => {
-    fetch("http://localhost:5000/cities", {
+    fetch("http://localhost:5000/cities:" +props.city._id, {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

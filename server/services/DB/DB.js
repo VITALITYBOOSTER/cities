@@ -1,5 +1,5 @@
 const MongoClient = require("mongodb").MongoClient;
-const handleMongoDbConnection = require('./DBplagins/callbackGet');
+const ObjectId = require("mongodb").ObjectID;
 
 module.exports = class DB {
 
@@ -13,25 +13,29 @@ module.exports = class DB {
             useUnifiedTopology : dbOptions.useUnifiedTopology
         })
         .connect();
-        console.log(this.mongoClient);
     };
 
     async getData() {
-        const res = (await (await (await
-        this.mongoClient)
-        .db("cities"))
-        .collection("cities"))
-        .find({});
-        console.log(res);
-        return res;
+        return (await (await (await
+            this.mongoClient)
+            .db("cities"))
+            .collection("cities"))
+            .find({});
     }
 
     async insertData(data = {}) {
-        const res = await this.mongoClient
-        .db("cities")
-        .collection("cities")
-        .insertOne(data);
-        console.log(res);
-        return res;
+        return  (await (await (await
+            this.mongoClient)
+            .db("cities"))
+            .collection("cities"))
+            .insertOne(data);
+    }
+
+    async deleteDataById(id) {
+        return  (await (await (await
+            this.mongoClient)
+            .db("cities"))
+            .collection("cities"))
+            .deleteOne({ "_id": ObjectId(id) }); 
     }
 }

@@ -1,5 +1,4 @@
 const express = require("express");
-const ObjectId = require("mongodb").ObjectID;
 const createCity = require("./models/City/cityCreator");
 const cityGetAll = require("./models/City/cityGetAll");
 const DBService = require( './services/DB/DB');
@@ -28,37 +27,19 @@ app.use(function(req, res, next) {
   next();
 });
 
-app.get("/", (req, res) => {
-  dbService.getData().then( data =>
-    data.toArray(cityGetAll(req, res))
-  )
+app.get("/", async (req, res) => {
+  const data = await dbService.getData();
+  await data.toArray(cityGetAll(req, res)); 
 });
 
 app.post("/cities", async (req, res, next) => {
-
-  /*try {
-    const a = await dbService.insert(bodyToSave);
-    req.json(a)
-  } catch (error) {
-    next(error);
-  }*/
-  
-
-  const cities = app.locals.cities;
-
-  const { bodyToSave, callback } = createCity(req, res);
-  const s = await dbService.insertData(bodyToSave);
-  cities.insertOne(bodyToSave, callback);
+  const { bodyToSave } = createCity(req, res);
+  await dbService.insertData(bodyToSave);
 })
 
-app.delete("/cities", (req, res) => {
-  
-  const cities = app.locals.cities;
-  cities.deleteOne({ "_id": ObjectId(req.body._id) }, (err, data) => {
-    if (err) console.log(err);
-    console.log(req._id);
-    res.send(data);
-  });
+app.delete("/cities:_id", async (req, res) => {
+  //////////////////////////REDO
+  dbService.deleteDataById(req.params._id);
 });
 
 //STARTING SERVER
