@@ -1,7 +1,7 @@
 const express = require("express");
 const createCity = require("./models/City/cityCreator");
-const cityGetAll = require("./models/City/cityGetAll");
 const DBService = require( './services/DB/DB');
+const getAllCities = require('./routes/api/api/getAllCities');
 
 const dbService = new DBService({
   dbUrl: "mongodb+srv://vitalii:bhbyf12123434A@cluster0-jd0za.mongodb.net/test?retryWrites=true&w=majority",
@@ -27,10 +27,7 @@ app.use(function(req, res, next) {
   next();
 });
 
-app.get("/", async (req, res) => {
-  const data = await dbService.getData();
-  await data.toArray(cityGetAll(req, res)); 
-});
+app.use('/', getAllCities);
 
 app.post("/cities", async (req, res, next) => {
   const { bodyToSave } = createCity(req, res);
