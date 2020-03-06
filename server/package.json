@@ -4,13 +4,14 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "start": "npm server.js",
+    "start": "npm app.js",
     "dev": "nodemon server"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "express": "^4.17.1",
+    "mongodb": "^3.5.4",
     "mongoose": "^5.8.5"
   },
   "devDependencies": {

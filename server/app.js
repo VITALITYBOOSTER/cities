@@ -1,15 +1,26 @@
 const express = require("express");
 const MongoClient = require("mongodb").MongoClient;
 const ObjectId = require("mongodb").ObjectID;
+
+//const DBService = require('./services/DB');
+
+/*const dbService = new DBService({
+  dbUrl: "mongodb+srv://vitalii:bhbyf12123434A@cluster0-jd0za.mongodb.net/test?retryWrites=true&w=majority",
+  dbOptions: {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+  }
+});*/
+
 const createCity = require("./models/City/cityCreator");
 const cityGetAll = require("./models/City/cityGetAll");
-
+console.log(createCity)
 const app = express();
 const jsonParser = express.json();
 app.use(jsonParser);
 const PORT = process.env.PORT || 8080;
 
-const mongoClient = new MongoClient("mongodb://localhost:27017/", {
+const mongoClient = new MongoClient("mongodb+srv://vitalii:bhbyf12123434A@cluster0-jd0za.mongodb.net/test?retryWrites=true&w=majority", {
   useNewUrlParser: true,
   useUnifiedTopology: true
 });
@@ -45,17 +56,26 @@ app.get("/", (req, res) => {
 
 });
 
-app.post("/cities", (req, res) => {
+app.post("/cities", async (req, res, next) => {
+
+  /*try {
+    const a = await dbService.insert(bodyToSave);
+    req.json(a)
+  } catch (error) {
+    next(error);
+  }*/
+  
+
 
   const cities = app.locals.cities;
 
-  const cityCreatorhandler = createCity(req, res);
+  const { bodyToSave, callback } = createCity(req, res);
 
-  cities.insertOne(cityCreatorhandler);
-  
+  cities.insertOne(bodyToSave, callback);
 })
 
 app.delete("/cities", (req, res) => {
+  
   const cities = app.locals.cities;
   cities.deleteOne({ "_id": ObjectId(req.body._id) }, (err, data) => {
     if (err) console.log(err);
@@ -63,6 +83,7 @@ app.delete("/cities", (req, res) => {
     res.send(data);
   });
 });
+
 
 //STARTING SERVER
 app.listen(PORT, () => {
