@@ -16,18 +16,7 @@ const jsonParser = express.json();
 
 app.use(jsonParser);
 
-const PORT = process.env.PORT || 8080;
-
-/*connect(function(err, client) {
-  const dataBase = client.db("cities");
-  const cities = dataBase.collection("cities");
-  app.locals.cities = cities;
-
-  
-  app.listen(5000, function() {
-    console.log("Сервер подключён");
-  });
-});*/
+const PORT = process.env.PORT || 5000;
 
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
@@ -40,11 +29,9 @@ app.use(function(req, res, next) {
 });
 
 app.get("/", (req, res) => {
-
-  const cities = app.locals.cities;
-
-  cities.find({}).toArray(cityGetAll(req, res));
-
+  dbService.getData().then( data =>
+    data.toArray(cityGetAll(req, res))
+  )
 });
 
 app.post("/cities", async (req, res, next) => {
@@ -56,10 +43,11 @@ app.post("/cities", async (req, res, next) => {
     next(error);
   }*/
   
+
   const cities = app.locals.cities;
 
   const { bodyToSave, callback } = createCity(req, res);
-
+  const s = await dbService.insertData(bodyToSave);
   cities.insertOne(bodyToSave, callback);
 })
 

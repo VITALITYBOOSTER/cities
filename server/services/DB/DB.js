@@ -12,18 +12,26 @@ module.exports = class DB {
             useNewUrlParser : dbOptions.useNewUrlParser,
             useUnifiedTopology : dbOptions.useUnifiedTopology
         })
-        .connect(handleMongoDbConnection);
+        .connect();
+        console.log(this.mongoClient);
     };
 
-    async insertData(data) {
-        const res = await this.mongoClient.insertOne();
+    async getData() {
+        const res = (await (await (await
+        this.mongoClient)
+        .db("cities"))
+        .collection("cities"))
+        .find({});
         console.log(res);
         return res;
     }
 
-    /*async saveRow(data) {
-        const res = await this.mongoClient.insert(data);
+    async insertData(data = {}) {
+        const res = await this.mongoClient
+        .db("cities")
+        .collection("cities")
+        .insertOne(data);
         console.log(res);
         return res;
-    }*/
+    }
 }

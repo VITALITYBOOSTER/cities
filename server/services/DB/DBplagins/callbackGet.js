@@ -1,1 +1,1 @@
-module.exports =  (error, client) => client;
+module.exports =  (error, client) => {return client};
