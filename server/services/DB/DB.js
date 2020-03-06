@@ -1,33 +1,29 @@
 const MongoClient = require("mongodb").MongoClient;
+const handleMongoDbConnection = require('./DBplagins/callbackGet');
 
 module.exports = class DB {
 
-    constructor(props) {
-        this.url = props.dbUrl
-        this.useNewUrlParser = props.dbOptions.useNewUrlParser || false
-        this.useUnifiedTopology = props.dbOptions.useUnifiedTopology || false 
-        this.mongoClient;
+    constructor({ dbUrl, useNewUrlParser = false, useUnifiedTopology = false }) {
+        this.connectToMongo({ dbUrl, useNewUrlParser, useUnifiedTopology });
     }
 
-    createMongoClient() {
-        this.mongoClient = new MongoClient(this.url, {
-            useNewUrlParser : this.useNewUrlParser,
-            useUnifiedTopology : this.useUnifiedTopology
+    connectToMongo(dbOptions) {
+        this.mongoClient = new MongoClient(dbOptions.dbUrl, {
+            useNewUrlParser : dbOptions.useNewUrlParser,
+            useUnifiedTopology : dbOptions.useUnifiedTopology
         })
-        console.log(this.mongoClient);
+        .connect(handleMongoDbConnection);
     };
 
-    getMongoClient() {
-        return this.mongoClient;
-    };
+    async insertData(data) {
+        const res = await this.mongoClient.insertOne();
+        console.log(res);
+        return res;
+    }
 
-    async connectToMongo() {
-        this.mongoClient.connect(()=> {
-                console.log('NOT IMPLEMENTED');
-        });
-    };
-
-    getDataBase(name) {
-        
-    }   
+    /*async saveRow(data) {
+        const res = await this.mongoClient.insert(data);
+        console.log(res);
+        return res;
+    }*/
 }

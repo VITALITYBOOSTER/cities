@@ -6,22 +6,19 @@ const DBService = require( './services/DB/DB');
 
 const dbService = new DBService({
   dbUrl: "mongodb+srv://vitalii:bhbyf12123434A@cluster0-jd0za.mongodb.net/test?retryWrites=true&w=majority",
-  dbOptions: {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-  }
+  useNewUrlParser: true,
+  useUnifiedTopology: true
 });
 
-dbService.createMongoClient();
-
 const app = express();
+
 const jsonParser = express.json();
+
 app.use(jsonParser);
+
 const PORT = process.env.PORT || 8080;
 
-dbService.getMongoClient().connect(function(err, client) {
-  dbClient = client;
-
+/*connect(function(err, client) {
   const dataBase = client.db("cities");
   const cities = dataBase.collection("cities");
   app.locals.cities = cities;
@@ -30,7 +27,7 @@ dbService.getMongoClient().connect(function(err, client) {
   app.listen(5000, function() {
     console.log("Сервер подключён");
   });
-});
+});*/
 
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
@@ -59,8 +56,6 @@ app.post("/cities", async (req, res, next) => {
     next(error);
   }*/
   
-
-
   const cities = app.locals.cities;
 
   const { bodyToSave, callback } = createCity(req, res);
@@ -77,7 +72,6 @@ app.delete("/cities", (req, res) => {
     res.send(data);
   });
 });
-
 
 //STARTING SERVER
 app.listen(PORT, () => {
