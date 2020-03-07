@@ -3,7 +3,7 @@ import { NavLink } from "react-router-dom";
 
 const Header = () => {
   return (
-    <div className="navbar navbar-expand-lg navbar-light bg-light">
+    <div className="navbar navbar-dark bg-light navbar-expand-lg">
       <header>
         <ul className="navbar-nav">
           <li className="nav-item nav-link">
@@ -11,6 +11,9 @@ const Header = () => {
           </li>
           <li className="nav-item nav-link">
             <NavLink to="/creating"> Create City </NavLink>
+          </li>
+          <li className="nav-item nav-link">
+            <NavLink to="/search"> Search City </NavLink>
           </li>
         </ul>
       </header>

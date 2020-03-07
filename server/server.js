@@ -56,15 +56,45 @@ app.post("/cities", (req, res) => {
   });
 });
 
-app.delete("/cities", (req, res) => {
+app.put("/cities/:id", (req, res) => {
   const cities = app.locals.cities;
-  cities.deleteOne({ "_id": ObjectId(req.body._id) }, (err, data) => {
-    if (err) console.log(err);
-    console.log(req._id);
-    res.send(data);
+  const id = req.params.id;
+  const percentage = req.body.percentageUpdate;
+
+  cities.updateOne(
+    { _id: ObjectId(id) },
+    { $set: { population: population * percentage } }
+  );
+});
+
+app.get("/cities/:cityname", (req, res) => {
+  const cities = app.locals.cities;
+  const cityName = req.params.cityname;
+
+  cities.find({ cityName: cityName }).toArray((err, result) => {
+    res.send(JSON.stringify(result));
   });
 });
 
+app.delete("/cities", (req, res) => {
+  const cities = app.locals.cities;
+  cities.deleteOne({ _id: ObjectId(req.body._id) }, (err, data) => {
+    res.send(JSON.stringify({ id: req.body._id }));
+  });
+});
+
+app.put("/cities:id", (req, res) => {
+  const cities = app.locals.cities;
+  const cityId = req.params.id;
+  const city = {
+    cityName: req.body.cityName,
+    originalCityName: req.body.originalCityName,
+    status: req.body.status,
+    population: req.body.population
+  };
+  
+  cities.updateOne({ _id: ObjectId(cityId) }, { $set: { city } });
+});
 //STARTING SERVER
 app.listen(PORT, () => {
   console.log("The server has started");

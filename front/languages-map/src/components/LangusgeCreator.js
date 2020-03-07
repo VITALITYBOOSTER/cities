@@ -40,7 +40,10 @@ const CityCreator = () => {
   };
 
   return (
-    <div className="input-group form-control-sm">
+    <div
+      className="input-group form-control-sm"
+      style={{ paddingLeft: "50px", paddingTop: "10px" }}
+    >
       <form onChange={e => handleChange(e)} onSubmit={handleSubmit}>
         <label>City name</label>
         <input
