@@ -5,7 +5,7 @@ const CityDisplayer = () => {
   const [allCities, setAllCities] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:5000/")
+    fetch("http://localhost:5000/cities")
       .then(data => data.json())
       .then(data => {
         console.log(data);
@@ -16,7 +16,7 @@ const CityDisplayer = () => {
   return (
     <div>
       {allCities.map(el => (
-        <CityDisplayItem city={el} key={el._id}></CityDisplayItem>
+        <CityDisplayItem city={el} key={el._id} filterCities={setAllCities} allCities={allCities}></CityDisplayItem>
       ))}
     </div>
   );

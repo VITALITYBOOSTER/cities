@@ -22,6 +22,7 @@ module.exports = class DB {
 
   async insertData(req) {
     const data = createCity(req);
+    console.log(data)
     return (
       await (await (await this.mongoClient).db("cities")).collection("cities")
     ).insertOne(data);
