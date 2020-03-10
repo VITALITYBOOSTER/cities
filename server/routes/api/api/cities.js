@@ -14,4 +14,16 @@ router.get('/', async (req, res) => {
     await data.toArray(cityGetAll(req, res)); 
 });
 
+router.delete('cities/:id', async (req, res) => {
+  await dbService.deleteDataById(req.params.id);
+});
+
+router.post('/cities', async (req, res) => {
+  await dbService.insertData(req);
+});
+
+router.put('cities/:id', async (req, res) => {
+  await dbService.editDataById(req.params.id);
+});
+
 module.exports = router;

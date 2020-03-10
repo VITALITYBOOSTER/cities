@@ -1,7 +1,7 @@
 import React from "react";
 import { Route } from "react-router-dom";
-import CityCreator from "./components/LangusgeCreator";
-import CityDisplayer from "./components/CityDisplaying/LanguageDisplayer";
+import CityCreator from "./components/CityCreator";
+import CityDisplayer from "./components/CityDisplaying/CityDisplayer";
 import Header from "./pages/Header";
 
 function App() {

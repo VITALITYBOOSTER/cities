@@ -11,17 +11,4 @@ const createCity = (req) => {
     }
 }
 
-const cityCreatingHandler = (req, res) => {
-    return {
-        bodyToSave: createCity(req), 
-        callback: (err, result) => {
-            if(!err) {
-                res.send(result);
-            }
-            else {
-                res.status(400).end();
-            }
-        }
-    }
-};
-module.exports = cityCreatingHandler;
+module.exports = createCity;
