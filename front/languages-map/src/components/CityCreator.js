@@ -32,7 +32,7 @@ const CityCreator = () => {
     };
     event.target.reset();
     resetStates();
-    fetch("http://localhost:5000/cities", {
+    fetch("http://localhost:5000/cities/cities", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(sendData)

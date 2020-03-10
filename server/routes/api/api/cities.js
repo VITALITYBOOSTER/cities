@@ -9,7 +9,7 @@ router.get('/', async (req, res) => {
     await data.toArray(cityGetAll(req, res)); 
 });
 
-router.delete('/:id', async (req, res) => {
+router.delete('/cities/:id', async (req, res) => {
   const { dbService } = req.locals.services;
   await dbService.deleteDataById(req.params.id);
 });
@@ -19,7 +19,7 @@ router.post('/cities', async (req, res) => {
   await dbService.insertData(req);
 });
 
-router.put('/:id', async (req, res) => {
+router.put('/cities/:id', async (req, res) => {
   const { dbService } = req.locals.services;
   await dbService.editDataById(req.params.id);
 });
