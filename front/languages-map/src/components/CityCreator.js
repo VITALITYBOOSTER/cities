@@ -23,6 +23,7 @@ const CityCreator = () => {
   };
 
   const handleSubmit = event => {
+    
     event.preventDefault();
     const sendData = {
       cityName,
@@ -32,7 +33,7 @@ const CityCreator = () => {
     };
     event.target.reset();
     resetStates();
-    fetch("http://localhost:5000/cities/cities", {
+    fetch("http://localhost:5000/cities/post-city", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(sendData)

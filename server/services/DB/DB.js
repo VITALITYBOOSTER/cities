@@ -2,43 +2,68 @@ const MongoClient = require("mongodb").MongoClient;
 const ObjectId = require("mongodb").ObjectID;
 const createCity = require("../../models/City/cityCreator");
 
-module.exports = class DB {
+class DB {
   constructor({ dbUrl, useNewUrlParser = false, useUnifiedTopology = false }) {
     this.connectToMongo({ dbUrl, useNewUrlParser, useUnifiedTopology });
   }
 
-  connectToMongo(dbOptions) {
-    this.mongoClient = new MongoClient(dbOptions.dbUrl, {
+  async connectToMongo(dbOptions) {
+    this.mongoClient = await new MongoClient(dbOptions.dbUrl, {
       useNewUrlParser: dbOptions.useNewUrlParser,
       useUnifiedTopology: dbOptions.useUnifiedTopology
     }).connect();
   }
 
-  async getData() {
-    return (
-      await (await (await this.mongoClient).db("cities")).collection("cities")
-    ).find({});
+  getCollection(nameOfCollection = "") {
+    return this.mongoClient.db("cities").collection(nameOfCollection);
   }
 
-  async insertData(req) {
-    const data = createCity(req);
-    console.log(data);
-    return (
-      await (await (await this.mongoClient).db("cities")).collection("cities")
-    ).insertOne(data);
+  async getData(from = 0, to = 0) {
+    try {
+      return await (await this.getCollection("cities"))
+        .find({})
+        .skip(+from)
+        .limit(+to);
+    } catch (e) {
+      console.log(e.name);
+    }
+  }
+
+  async insertData(city = {}) {
+    const data = createCity(city);
+    try {
+      return await this.getCollection("cities").insertOne(data);
+    } catch (e) {
+      console.log(e.name);
+    }
   }
 
   async deleteDataById(id) {
-    return await (
-      await (await (await this.mongoClient).db("cities")).collection("cities")
-    ).deleteOne({ _id: ObjectId(id) });
+    if (!id) {
+      return Promise.reject();
+    }
+    try {
+      return await (await this.getCollection("cities")).deleteOne({
+        _id: ObjectId(id)
+      });
+    } catch (e) {
+      console.log(e.name);
+    }
   }
 
-  async editDataById(id) {
-    return await await (
-      await (await (await this.mongoClient).db("cities")).collection(
-        "collection"
-      )
-    ).findOneAndUpdate({ _id: ObjectId(id) }, {...req.body});
+  async editDataById(id, city = {}) {
+    if (!id) {
+      return Promise.reject();
+    }
+    try {
+      return await (await this.getCollection("cities")).findOneAndUpdate(
+        { _id: ObjectId(id) },
+        { $set: { ...city } }
+      );
+    } catch (e) {
+      console.log(e.name);
+    }
   }
-};
+}
+
+module.exports = DB;

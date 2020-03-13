@@ -1,6 +1,5 @@
-const handleGetAll = (req, res) => {
+const handleGetAll = (res) => {
     return (err, result) => {
-      console.log(result);
         (err) ? 
         res.status(404).send("The data isnt found")
         : 

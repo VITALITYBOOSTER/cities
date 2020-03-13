@@ -1,13 +1,9 @@
-const createCity = (req) => {
-    if(!req.body) {
-        res.status(400).send("The body of the request is empty");
-        return {};
-    }
+const createCity = (city) => {
     return {
-        cityName: req.body.cityName,
-        originalCityName: req.body.originalCityName,
-        status: req.body.status,
-        population: +req.body.population
+        cityName: city.cityName,
+        originalCityName: city.originalCityName,
+        status: city.status,
+        population: +city.population
     }
 }
 
